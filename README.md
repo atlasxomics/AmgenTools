@@ -1,5 +1,6 @@
 # AmgenTools
 
+All the extended
 ### AWS ec2 configurations:
 Note: We created our own AMI with these settings below
 
@@ -24,3 +25,14 @@ Below will be the necessary naming scheme for the folders within the s3
 
 - atx-track-host
   - In this folder upload the folder in the git repo named [ref]()
+ 
+
+### Commands to start docker containers
+```
+docker network create atx-cloud
+cd /root/AmgenTools/dockerfiles
+docker-compose up -d
+```
+
+
+
