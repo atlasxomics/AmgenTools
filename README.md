@@ -18,7 +18,7 @@ These need to be installed on the ec2 instance
  
 ### Config File details
 
-config.yml file is required to be ready with AWS credentials as well as other options. config_template.yml can be copied and furnished with required parameters. When creating s3 bucket folder structure it will need to match what is defined in the config.yml file
+config.yml file is required to be ready with AWS credentials as well as bucket-name. config_template.yml can be copied and furnished with required parameters. 
 
 ### s3 bucket structure
 Below will be the necessary naming scheme for the folders within the s3
