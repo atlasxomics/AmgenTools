@@ -1,6 +1,5 @@
 # AmgenTools
 
-All the extended
 ### AWS ec2 configurations:
 Note: We created our own AMI with these settings below
 
