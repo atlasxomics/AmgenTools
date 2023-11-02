@@ -3,7 +3,7 @@
 ### AWS ec2 configurations:
 Note: We created our own AMI with these settings below
 
-- Instance type: t2.large
+- Instance type: t2.xlarge
 - vCPU: 4
 - Platform: Ubuntu
 - Platform details: Linux/UNIX
