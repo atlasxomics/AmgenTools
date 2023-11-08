@@ -1,0 +1,6 @@
+.DS_STORE
+__pycache__
+config.yml
+.cache
+.config
+dist

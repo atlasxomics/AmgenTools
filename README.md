@@ -17,7 +17,8 @@ These need to be installed on the ec2 instance
  
 ### Config File details
 
-config.yml file is required to be ready with AWS credentials as well as bucket-name. config_template.yml can be copied and furnished with required parameters. 
+config.yml file is required to be ready with AWS credentials as well as bucket-name. config_template.yml can be copied and furnished with required parameters.
+The config file must be placed inside the folder AmgenTool and in AmgenTools/workers
 
 ### s3 bucket structure
 Below will be the necessary naming scheme for the folders within the s3

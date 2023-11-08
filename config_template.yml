@@ -7,7 +7,7 @@ AWS_SECRET_ACCESS_KEY: null
 AWS_DEFAULT_REGION: null
 
 ## S3
-S3_BUCKET_NAME: 'atx-cloud-dev'
+S3_BUCKET_NAME: 'amgen-atx-cloud-dev'
 
 
 ## RabbitMQ 
