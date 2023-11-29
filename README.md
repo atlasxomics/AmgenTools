@@ -34,5 +34,11 @@ cd /root/AmgenTools/dockerfiles
 docker-compose up -d
 ```
 
-
+### Commands to clean up all docker systems
+```
+cd /root/AmgenTools/dockerfiles
+docker-compose up down
+docker system prune -a 
+```
+After the last command. Enter y when prompted and then click Enter/Return
 
