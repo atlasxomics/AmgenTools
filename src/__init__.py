@@ -10,6 +10,7 @@ from flask import Flask
 ## App related
 from src.storage import StorageAPI
 from src.tasks import TaskAPI
+from src.genes import GeneAPI
 from flask import render_template
     
 
@@ -53,3 +54,4 @@ app.config['APP_VERSION']=version
 app.config['SUBMODULES']={}
 app.config['SUBMODULES']['StorageAPI']=StorageAPI(app)
 app.config['SUBMODULES']['TaskAPI']=TaskAPI(app)
+app.config['SUBMODULES']['GeneAPI']=GeneAPI(app)
