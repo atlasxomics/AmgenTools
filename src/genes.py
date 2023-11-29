@@ -66,11 +66,11 @@ class GeneAPI:
                 sc=500
                 exc=traceback.format_exc()
                 res=utils.error_message("{} {}".format(str(e),exc),status_code=sc)
-                self.app.logger.exception(res['msg'])
+                
             finally:
                 resp=Response(json.dumps(res),status=sc)
                 resp.headers['Content-Type']='application/json'
-                self.app.logger.info(utils.log(str(sc)))
+                
                 return resp
         @self.app.route('/api/v1/genes/gmnames/<token>',methods=['POST'])
         def _getGeneMotifNamesByToken(token):
@@ -83,11 +83,11 @@ class GeneAPI:
                 sc=500
                 exc=traceback.format_exc()
                 res=utils.error_message("{} {}".format(str(e),exc),status_code=sc)
-                self.app.logger.exception(res['msg'])
+                
             finally:
                 resp=Response(json.dumps(res),status=sc)
                 resp.headers['Content-Type']='application/json'
-                self.app.logger.info(utils.log(str(sc)))
+                
                 return resp
         @self.app.route('/api/v1/genes/get_spatial_data',methods=['POST'])
         def _getSpatialData():
@@ -100,11 +100,11 @@ class GeneAPI:
                 sc=500
                 exc=traceback.format_exc()
                 res=utils.error_message("{} {}".format(str(e),exc),status_code=sc)
-                self.app.logger.exception(res['msg'])
+                
             finally:
                 resp=Response(json.dumps(res),status=sc)
                 resp.headers['Content-Type']='application/json'
-                self.app.logger.info(utils.log(str(sc)))
+                
                 return resp
         
         @self.app.route('/api/v1/genes/get_spatial_data/<token>',methods=['POST'])
@@ -118,11 +118,11 @@ class GeneAPI:
                 sc=500
                 exc=traceback.format_exc()
                 res=utils.error_message("{} {}".format(str(e),exc),status_code=sc)
-                self.app.logger.exception(res['msg'])
+                
             finally:
                 resp=Response(json.dumps(res),status=sc)
                 resp.headers['Content-Type']='application/json'
-                self.app.logger.info(utils.log(str(sc)))
+                
                 return resp
         
         @self.app.route('/api/v1/genes/expressions',methods=['POST'])
@@ -137,11 +137,11 @@ class GeneAPI:
                 sc=500
                 exc=traceback.format_exc()
                 res=utils.error_message("{} {}".format(str(e),exc),status_code=sc)
-                self.app.logger.exception(res['msg'])
+                
             finally:
                 resp=Response(json.dumps(res),status=sc)
                 resp.headers['Content-Type']='application/json'
-                self.app.logger.info(utils.log(str(sc)))
+                
                 return resp  
 
         @self.app.route('/api/v1/genes/expressions/<token>',methods=['POST'])
@@ -155,11 +155,11 @@ class GeneAPI:
                 sc=500
                 exc=traceback.format_exc()
                 res=utils.error_message("{} {}".format(str(e),exc),status_code=sc)
-                self.app.logger.exception(res['msg'])
+                
             finally:
                 resp=Response(json.dumps(res),status=sc)
                 resp.headers['Content-Type']='application/json'
-                self.app.logger.info(utils.log(str(sc)))
+                
                 return resp  
 
         @self.app.route('/api/v1/genes/generate_link',methods=['POST'])
@@ -174,11 +174,11 @@ class GeneAPI:
                 sc=500
                 exc=traceback.format_exc()
                 res=utils.error_message("{} {}".format(str(e),exc),status_code=sc)
-                self.app.logger.exception(res['msg'])
+                
             finally:
                 resp=Response(json.dumps(res),status=sc)
                 resp.headers['Content-Type']='application/json'
-                self.app.logger.info(utils.log(str(sc)))
+                
                 return resp  
 
         @self.app.route('/api/v1/genes/decode_link/<link>',methods=['GET'])
@@ -193,11 +193,11 @@ class GeneAPI:
                 sc=500
                 exc=traceback.format_exc()
                 res=utils.error_message("{} {}".format(str(e),exc),status_code=sc)
-                self.app.logger.exception(res['msg'])
+                
             finally:
                 resp=Response(json.dumps(res),status=sc)
                 resp.headers['Content-Type']='application/json'
-                self.app.logger.info(utils.log(str(sc)))
+                
                 return resp
               
         @self.app.route('/api/v1/genes/get_summation',methods=['POST'])
@@ -213,11 +213,11 @@ class GeneAPI:
                 sc=500
                 exc=traceback.format_exc()
                 res=utils.error_message("{} {}".format(str(e),exc),status_code=sc)
-                self.app.logger.exception(res['msg'])
+                
             finally:
                 resp=Response(json.dumps(res),status=sc)
                 resp.headers['Content-Type']='application/json'
-                self.app.logger.info(utils.log(str(sc)))
+                
                 return resp  
 
     def get_Summation(self, filename, rows):
