@@ -229,7 +229,7 @@ class StorageAPI:
             finally:
                 return resp   
 
-        @self.auth.app.route('/api/v1/storage/download_link',methods=['GET'])
+        @self.app.route('/api/v1/storage/download_link',methods=['GET'])
         def _downloadFileByLink():
             sc=200
             res=None
@@ -244,10 +244,9 @@ class StorageAPI:
             finally:
                 resp=Response(json.dumps(res),status=res['status_code'])
                 resp.headers['Content-Type']='application/json'
-                self.auth.app.logger.info(utils.log(str(sc)))
                 return resp
               
-        @self.auth.app.route('/api/v1/storage/download_link_public',methods=['GET'])
+        @self.app.route('/api/v1/storage/download_link_public',methods=['GET'])
         def _downloadFileByLinkPublic():
             sc=200
             res=None
