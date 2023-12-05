@@ -36,7 +36,7 @@ docker-compose up -d
 
 ### Commands to clean up all docker systems
 ```
-cd /root/AmgenTools/dockerfiles
+cd /root/PortableAtlasTools/dockerfiles
 docker-compose down
 docker system prune -a 
 ```
