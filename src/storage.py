@@ -229,7 +229,23 @@ class StorageAPI:
             finally:
                 return resp   
 
-            
+        @self.auth.app.route('/api/v1/storage/download_link_public',methods=['GET'])
+        def _downloadFileByLinkPublic():
+            sc=200
+            res=None
+            param_filename=request.args.get('filename',type=str)
+            param_bucket=request.args.get('bucket_name',default=self.bucket_name,type=str)
+            try:
+                res= self.downloadFile_link_public(param_bucket,param_filename)
+                res= utils.result_message(res)
+            except Exception as e:
+                res=utils.error_message(str(e))
+            finally:
+                resp=Response(json.dumps(res),status=res['status_code'])
+                resp.headers['Content-Type']='application/json'
+                self.auth.app.logger.info(utils.log(str(sc)))
+                return resp
+                     
 ###### actual methods
 
     def getFileObject(self,bucket_name,filename, no_aws_yes_server = True):
@@ -362,7 +378,20 @@ class StorageAPI:
         return bytesIO, ext, size , temp_outpath.__str__()
 
 
-
+    def downloadFile_link_public(self,bucket_name,filename):
+        _,tf,date,size=self.checkFileExists(bucket_name,filename)
+        if not tf :
+            return utils.error_message("The file doesn't exists",status_code=404)
+        else:
+            try:
+                resp= "https://{}.s3.amazonaws.com/{}".format(bucket_name,filename)
+            except Exception as e:
+                exc=traceback.format_exc()
+                self.auth.app.logger.exception(utils.log(exc))
+                return utils.error_message("Couldn't have finished to get the link of the file: {}, {}".format(str(e),exc),status_code=500)
+        self.auth.app.logger.info("File Link returned {}".format(str(resp)))
+        return resp
+      
     def getJsonFromFile(self, bucket_name, filename, no_aws_yes_server):
       _,_,_,name=self.getFileObject(bucket_name,filename, no_aws_yes_server)
       out = json.load(open(name,'rb'))
