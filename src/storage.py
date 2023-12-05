@@ -229,6 +229,24 @@ class StorageAPI:
             finally:
                 return resp   
 
+        @self.auth.app.route('/api/v1/storage/download_link',methods=['GET'])
+        def _downloadFileByLink():
+            sc=200
+            res=None
+            param_filename=request.args.get('filename',type=str)
+            param_bucket=request.args.get('bucket_name',default=self.bucket_name,type=str)
+            param_expiry=request.args.get('expiry', default=3600, type=int)
+            try:
+                res= self.downloadFile_link(param_bucket,param_filename, param_expiry)
+                res= utils.result_message(res)
+            except Exception as e:
+                res=utils.error_message(str(e))
+            finally:
+                resp=Response(json.dumps(res),status=res['status_code'])
+                resp.headers['Content-Type']='application/json'
+                self.auth.app.logger.info(utils.log(str(sc)))
+                return resp
+              
         @self.auth.app.route('/api/v1/storage/download_link_public',methods=['GET'])
         def _downloadFileByLinkPublic():
             sc=200
@@ -377,7 +395,21 @@ class StorageAPI:
             f.close()
         return bytesIO, ext, size , temp_outpath.__str__()
 
-
+    def downloadFile_link(self,bucket_name,filename, expiry):
+        _,tf,date,size=self.checkFileExists(bucket_name,filename)
+        if not tf :
+            return utils.error_message("The file doesn't exists",status_code=404)
+        else:
+            try:
+                resp=self.aws_s3.generate_presigned_url('get_object',
+                                                Params={'Key':filename,
+                                                        'Bucket':bucket_name},
+                                                ExpiresIn=expiry)
+            except Exception as e:
+                exc=traceback.format_exc()
+                return utils.error_message("Couldn't have finished to get the link of the file: {}, {}".format(str(e),exc),status_code=500)
+        return resp
+      
     def downloadFile_link_public(self,bucket_name,filename):
         _,tf,date,size=self.checkFileExists(bucket_name,filename)
         if not tf :
@@ -387,9 +419,7 @@ class StorageAPI:
                 resp= "https://{}.s3.amazonaws.com/{}".format(bucket_name,filename)
             except Exception as e:
                 exc=traceback.format_exc()
-                self.auth.app.logger.exception(utils.log(exc))
                 return utils.error_message("Couldn't have finished to get the link of the file: {}, {}".format(str(e),exc),status_code=500)
-        self.auth.app.logger.info("File Link returned {}".format(str(resp)))
         return resp
       
     def getJsonFromFile(self, bucket_name, filename, no_aws_yes_server):
