@@ -20,6 +20,7 @@ import csv
 import cv2
 import gzip
 import glob
+import subprocess
 from flask_cors import CORS
 import datetime
 import boto3
