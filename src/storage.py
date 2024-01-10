@@ -479,13 +479,7 @@ class StorageAPI:
       else:
         page_iterator = subprocess.run(f"aws s3api list-objects --bucket {bucket_name} --prefix {root_path}", shell=True, capture_output=True)
           
-      res=[]
-      text = open('/root/output.txt')
-      value = text.read()
-      while len(value) == 0:
-          time.sleep(2)
-          value = text.read()
-      file_paths = json.loads(value)
+      file_paths = json.loads(page_iterator.stdout.decode())
       print(file_paths)
       temp = [f['Key'] for f in file_paths['Contents']]
       if fltr is not None or only_files:
