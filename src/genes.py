@@ -307,7 +307,7 @@ class GeneAPI:
       return data + lenOfTixels 
     def checkFileExists(self,bucket_name,filename):
       try:
-          head = subprocess.run(f"echo 'aws s3api head-object --bucket {bucket_name} --key {filename}'", shell=True, capture_output=True)
+          head = subprocess.run(f"aws s3api head-object --bucket {bucket_name} --key {filename}", shell=True, capture_output=True)
           object = json.loads(head.stdout.decode())
           print(object)
           date = object['LastModified']
@@ -325,14 +325,14 @@ class GeneAPI:
             if not temp_outpath.exists():
               temp_outpath.parent.mkdir(parents=True, exist_ok=True)
               f=open(temp_outpath,'wb+')
-              subprocess.run(f"echo 'aws s3api get-object --bucket {bucket_name} --key {filename} {temp_outpath}'", shell=True)
+              subprocess.run(f"aws s3api get-object --bucket {bucket_name} --key {filename} {temp_outpath}", shell=True)
               f.close()
             else:
               modified_time = os.path.getmtime(temp_outpath)
               formatted = datetime.datetime.fromtimestamp(modified_time)
               if date.replace(tzinfo=None) > formatted and size > 0:
                 f=open(temp_outpath,'wb+')
-                subprocess.run(f"echo 'aws s3api get-object --bucket {bucket_name} --key {filename} {temp_outpath}'", shell=True)
+                subprocess.run(f"aws s3api get-object --bucket {bucket_name} --key {filename} {temp_outpath}", shell=True)
                 f.close()
 
             return str(temp_outpath)
@@ -347,7 +347,7 @@ class GeneAPI:
         if not tf :
             return utils.error_message("The file doesn't exists",status_code=404)
         else:
-            retr = subprocess.run(f"echo 'aws s3api get-object --bucket {bucket_name} --key {filename} {temp_outpath}'", shell=True)
+            retr = subprocess.run(f"aws s3api get-object --bucket {bucket_name} --key {filename} {temp_outpath}", shell=True)
             bytestream = io.BytesIO(retr['Body'].read())
             got_text = gzip.GzipFile(None, 'rb', fileobj=bytestream).read().decode('utf-8')
             f = gzip.open(temp_outpath, 'wt')

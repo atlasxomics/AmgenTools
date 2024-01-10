@@ -479,6 +479,7 @@ class StorageAPI:
       else:
         page_iterator = subprocess.run(f"aws s3api list-objects --bucket {bucket_name} --prefix {root_path}", shell=True, capture_output=True)
           
+      res = []
       file_paths = json.loads(page_iterator.stdout.decode())
       print(file_paths)
       temp = [f['Key'] for f in file_paths['Contents']]
