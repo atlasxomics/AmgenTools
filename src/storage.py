@@ -445,7 +445,7 @@ class StorageAPI:
         return out
 
     def get_subfolders(self, bucket_name, prefix):
-        page_iterator = subprocess.run(f"aws s3api list-objects --bucket {bucket_name} --prefix {prefix}--delimiter /", shell=True, capture_output=True)
+        page_iterator = subprocess.run(f"aws s3api list-objects --bucket {bucket_name} --prefix {prefix} --delimiter /", shell=True, capture_output=True)
         res = []
         file_paths = json.loads(page_iterator.stdout.decode())
         print(file_paths)
