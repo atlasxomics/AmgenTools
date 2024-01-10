@@ -6,24 +6,6 @@ volumes:
     driver: local
 
 services:
-  atx-cloud:
-    container_name: atx-cloud
-    working_dir: /root
-    networks:
-      - atx-cloud
-    image: atx-cloud
-    build: . 
-    user: 0:0
-    ipc: host
-    ports:
-      - 5000:5000
-    #restart: always
-    volumes:
-      - $PWD/../:/root
-      - /root/pipe:/hostpipe
-    environment:
-      - TZ=America/New_York
-    command: uwsgi --http 0.0.0.0:5000 --module main:app
   rmq:
     image: rabbitmq:3-management
     container_name: rabbitmq

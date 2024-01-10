@@ -1,0 +1,15 @@
+uwsgi
+flask
+flask_restful
+flask-cors
+Pillow
+boto3
+requests
+celery
+redis
+pika
+flask_jwt_extended
+pyyaml
+scanpy
+numpy == 1.23.3
+opencv-python

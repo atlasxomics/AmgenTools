@@ -36,8 +36,6 @@ class StorageAPI:
         CORS(self.app)
         self.tempDirectory=Path(self.app.config['TEMP_DIRECTORY'])
         self.bucket_name=self.app.config['S3_BUCKET_NAME']
-        self.aws_s3 = boto3.client('s3')
-        self.aws_s3_resource = boto3.resource('s3')
         self.initialize()
         self.initEndpoints()
     def initialize(self):
@@ -283,7 +281,7 @@ class StorageAPI:
           if not temp_outpath.exists():
             temp_outpath.parent.mkdir(parents=True, exist_ok=True)
             f=open(temp_outpath,'wb+')
-            self.aws_s3.download_fileobj(bucket_name,filename,f)
+            subprocess.run(f"echo 'aws s3api get-object --bucket {bucket_name} --key {filename} {temp_outpath}'", shell=True)
             bytesIO=io.BytesIO(f.read())
             size=os.fstat(f.fileno()).st_size
             f.close()
@@ -292,7 +290,7 @@ class StorageAPI:
             formatted = datetime.datetime.fromtimestamp(modified_time)
             if date.replace(tzinfo=None) > formatted and size > 0:
               f=open(temp_outpath,'wb+')
-              self.aws_s3.download_fileobj(bucket_name,filename,f)
+              subprocess.run(f"echo 'aws s3api get-object --bucket {bucket_name} --key {filename} {temp_outpath}'", shell=True)
             else :
               f=open(temp_outpath, 'rb')
             bytesIO=io.BytesIO(f.read())
@@ -327,7 +325,7 @@ class StorageAPI:
         else:
             if temp_outpath.exists() == False: temp_outpath.parent.mkdir(parents=True, exist_ok=True)
             f=open(temp_outpath,'wb+')
-            self.aws_s3.download_fileobj(bucket_name,filename,f)
+            subprocess.run(f"echo 'aws s3api get-object --bucket {bucket_name} --key {filename} {temp_outpath}'", shell=True)
             f.close()
             img=cv2.imread(temp_outpath.__str__(),cv2.IMREAD_COLOR)
         if rotation != 0:
@@ -388,7 +386,7 @@ class StorageAPI:
             if temp_outpath.exists() == False: 
               temp_outpath.parent.mkdir(parents=True, exist_ok=True)
               f=open(temp_outpath,'wb+')
-              self.aws_s3.download_fileobj(bucket_name,filename,f)
+              subprocess.run(f"echo 'aws s3api get-object --bucket {bucket_name} --key {filename} {temp_outpath}'", shell=True)
             else:
               f=open(temp_outpath,'rb+')
             bytesIO=io.BytesIO(f.read())
@@ -402,16 +400,10 @@ class StorageAPI:
             return utils.error_message("The file doesn't exists",status_code=404)
         else:
             try:
-                command = f"echo 'aws s3 presign s3://{bucket_name}/{filename}' > /hostpipe/mypipe"
-                subprocess.run(command, shell=True)
-                text = open('/hostpipe/output.txt')
-                url = text.readline()
-                count = 0
-                while len(url) == 0 and count < 30:
-                    time.sleep(2)
-                    url = text.readline()
-                    count += 1
-                resp = url
+                url = subprocess.run(f"echo 'aws s3 presign s3://{bucket_name}/{filename}'", shell=True, capture_output=True)
+                print(url.stdout.decode())
+                resp = url.stdout.decode()
+                
             except Exception as e:
                 exc=traceback.format_exc()
                 return utils.error_message("Couldn't have finished to get the link of the file: {}, {}".format(str(e),exc),status_code=500)
@@ -423,16 +415,9 @@ class StorageAPI:
             return utils.error_message("The file doesn't exists",status_code=404)
         else:
             try:
-                command = f"echo 'aws s3 presign s3://{bucket_name}/{filename}' > /hostpipe/mypipe"
-                subprocess.run(command, shell=True)
-                text = open('/hostpipe/output.txt')
-                url = text.readline()
-                count = 0
-                while len(url) == 0 and count < 30:
-                    time.sleep(2)
-                    url = text.readline()
-                    count += 1
-                resp = url
+                url = subprocess.run(f"echo 'aws s3 presign s3://{bucket_name}/{filename}'", shell=True, capture_output=True)
+                print(url.stdout.decode())
+                resp = url.stdout.decode()
             except Exception as e:
                 exc=traceback.format_exc()
                 return utils.error_message("Couldn't have finished to get the link of the file: {}, {}".format(str(e),exc),status_code=500)
@@ -460,17 +445,15 @@ class StorageAPI:
         return out
 
     def get_subfolders(self, bucket_name, prefix):
-        paginator_config = {"MaxKeys": 1000, "Prefix": prefix, "Bucket": bucket_name, "Delimiter": "/"}
-        paginator = self.aws_s3.get_paginator("list_objects")
-        result = paginator.paginate(**paginator_config)
+        page_iterator = subprocess.run(f"echo 'aws s3api list-objects --bucket {bucket_name} --prefix {prefix}--delimiter /'", shell=True, capture_output=True)
         res = []
-        for page in result:
-            prefixes = page.get("CommonPrefixes", [])
-            for prefix_obj in prefixes:
-                full = prefix_obj["Prefix"]
-                split = full.split(prefix)
-                folder_name = split[1][:-1]
-                res.append(folder_name)
+        file_paths = json.loads(page_iterator.stdout.decode())
+        print(file_paths)
+        for path in file_paths['CommonPrefixes']:
+            full = path["Prefix"]
+            split = full.split(prefix)
+            folder_name = split[1][:-1]
+            res.append(folder_name)
         return res
 
     def getFileList(self,bucket_name,root_path, fltr=None, delimiter = None, only_files = False): #get all pages
@@ -490,26 +473,26 @@ class StorageAPI:
         return True
       
       if not bucket_name: bucket_name = self.bucket_name
-          
-      paginator=self.aws_s3.get_paginator('list_objects')
-      operation_parameters = {'Bucket': bucket_name,
-                              'Prefix': root_path
-                              }
+    
       if delimiter:
-        operation_parameters['Delimiter'] = delimiter
-      page_iterator=paginator.paginate(**operation_parameters)
+        page_iterator = subprocess.run(f"echo 'aws s3api list-objects --bucket {bucket_name} --prefix {root_path} --delimiter {delimiter}'", shell=True, capture_output=True)
+      else:
+        page_iterator = subprocess.run(f"echo 'aws s3api list-objects --bucket {bucket_name} --prefix {root_path}'", shell=True, capture_output=True)
+          
       res=[]
-      for p in page_iterator:
-          if 'Contents' in p:
-              temp=[f['Key'] for f in p['Contents']]
-              if fltr is not None or only_files:
-                temp=list(filter(lambda x: checkList(x, fltr), temp))
-              res+=temp
+      file_paths = json.loads(page_iterator.stdout.decode())
+      print(file_paths)
+      temp = [f['Key'] for f in file_paths['Contents']]
+      if fltr is not None or only_files:
+        temp=list(filter(lambda x: checkList(x, fltr), temp))
+      res+=temp
       return res 
 
     def checkFileExists(self,bucket_name,filename):
       try:
-          object = self.aws_s3.head_object(Bucket=bucket_name, Key=filename)
+          head = subprocess.run(f"echo 'aws s3api head-object --bucket {bucket_name} --key {filename}'", shell=True, capture_output=True)
+          object = json.loads(head.stdout.decode())
+          print(object)
           date = object['LastModified']
           size = object['ContentLength']
           return 200, True, date, size

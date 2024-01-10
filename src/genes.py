@@ -34,8 +34,7 @@ import gzip
 from flask_cors import CORS
 import re
 import jwt
-import boto3
-from botocore.exceptions import ClientError
+import subprocess
 
 class GeneAPI:
     def __init__(self,app,**kwargs):
@@ -43,7 +42,6 @@ class GeneAPI:
         CORS(self.app)
         self.bucket_name=self.app.config['S3_BUCKET_NAME']
         self.tempDirectory=Path(self.app.config['TEMP_DIRECTORY'])
-        self.aws_s3=boto3.client('s3')
         self.initialize()
         self.initEndpoints()
 
@@ -309,7 +307,9 @@ class GeneAPI:
       return data + lenOfTixels 
     def checkFileExists(self,bucket_name,filename):
       try:
-          object = self.aws_s3.head_object(Bucket=bucket_name, Key=filename)
+          head = subprocess.run(f"echo 'aws s3api head-object --bucket {bucket_name} --key {filename}'", shell=True, capture_output=True)
+          object = json.loads(head.stdout.decode())
+          print(object)
           date = object['LastModified']
           size = object['ContentLength']
           return 200, True, date, size
@@ -325,14 +325,14 @@ class GeneAPI:
             if not temp_outpath.exists():
               temp_outpath.parent.mkdir(parents=True, exist_ok=True)
               f=open(temp_outpath,'wb+')
-              self.aws_s3.download_fileobj(bucket_name,filename,f)
+              subprocess.run(f"echo 'aws s3api get-object --bucket {bucket_name} --key {filename} {temp_outpath}'", shell=True)
               f.close()
             else:
               modified_time = os.path.getmtime(temp_outpath)
               formatted = datetime.datetime.fromtimestamp(modified_time)
               if date.replace(tzinfo=None) > formatted and size > 0:
                 f=open(temp_outpath,'wb+')
-                self.aws_s3.download_fileobj(bucket_name,filename,f)
+                subprocess.run(f"echo 'aws s3api get-object --bucket {bucket_name} --key {filename} {temp_outpath}'", shell=True)
                 f.close()
 
             return str(temp_outpath)
@@ -347,7 +347,7 @@ class GeneAPI:
         if not tf :
             return utils.error_message("The file doesn't exists",status_code=404)
         else:
-            retr = self.aws_s3.get_object(Bucket=self.bucket_name, Key=filename)
+            retr = subprocess.run(f"echo 'aws s3api get-object --bucket {bucket_name} --key {filename} {temp_outpath}'", shell=True)
             bytestream = io.BytesIO(retr['Body'].read())
             got_text = gzip.GzipFile(None, 'rb', fileobj=bytestream).read().decode('utf-8')
             f = gzip.open(temp_outpath, 'wt')
