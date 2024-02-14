@@ -419,15 +419,7 @@ class StorageAPI:
       
     def downloadFile_link_public(self,bucket_name,filename):
         bucket_name = 'atx-track-host'
-        _,tf,date,size=self.checkFileExists(bucket_name,filename)
-        if not tf :
-            return utils.error_message("The file doesn't exists",status_code=404)
-        else:
-            try:
-                resp= "https://{}.s3.amazonaws.com/{}".format(bucket_name,filename)
-            except Exception as e:
-                exc=traceback.format_exc()
-                return utils.error_message("Couldn't have finished to get the link of the file: {}, {}".format(str(e),exc),status_code=500)
+        resp= "https://{}.s3.amazonaws.com/{}".format(bucket_name,filename)
         return resp
       
     def getJsonFromFile(self, bucket_name, filename, no_aws_yes_server):
