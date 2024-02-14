@@ -26,7 +26,10 @@ Below will be the necessary naming scheme for the folders within the s3
 - atx-track-host
   - In this folder upload the folder in the git repo named [ref]()
  
-
+### Commands to create pipeline
+```
+sh <script_name.sh>
+```
 ### Commands to start docker containers
 ```
 docker network create atx-cloud
