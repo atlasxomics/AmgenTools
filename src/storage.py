@@ -423,16 +423,7 @@ class StorageAPI:
             return utils.error_message("The file doesn't exists",status_code=404)
         else:
             try:
-                command = f"echo 'aws s3 presign s3://{bucket_name}/{filename}' > /hostpipe/mypipe"
-                subprocess.run(command, shell=True)
-                text = open('/hostpipe/output.txt')
-                url = text.readline()
-                count = 0
-                while len(url) == 0 and count < 30:
-                    time.sleep(2)
-                    url = text.readline()
-                    count += 1
-                resp = url
+                resp= "https://{}.s3.amazonaws.com/{}".format(bucket_name,filename)
             except Exception as e:
                 exc=traceback.format_exc()
                 return utils.error_message("Couldn't have finished to get the link of the file: {}, {}".format(str(e),exc),status_code=500)
