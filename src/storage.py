@@ -418,6 +418,7 @@ class StorageAPI:
         return resp
       
     def downloadFile_link_public(self,bucket_name,filename):
+        bucket_name = 'atx-track-host'
         _,tf,date,size=self.checkFileExists(bucket_name,filename)
         if not tf :
             return utils.error_message("The file doesn't exists",status_code=404)
