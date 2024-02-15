@@ -194,7 +194,6 @@ class StorageAPI:
             req = request.get_json()
             param_filename= req.get('path', "")
             param_bucket=req.get('bucket', self.bucket_name)
-            print(param_bucket)
             param_filter=req.get('filter', None)
             param_delimiter = req.get('delimiter', None)
             only_files = req.get('only_files', False)
