@@ -1,47 +1,42 @@
-import subprocess
-
+import re
 
 js_path = 'src/static/js/app.38acc792.js'
 js_map_path = 'src/static/js/app.38acc792.js.map'
+url = ''
 all_paths = [js_map_path, js_path]
-def check_url(old):
+
+def check_with_user():
+    global url
+    global js_map_path
+    file = open(js_map_path, 'r')
+    all_lines = file.read()
+    pattern = r"PROD_SERVER_URL\s*=\s*'([^']+)'"
+    match = re.search(pattern, all_lines)
+    url = match.group(1)
+    return f"Input y if this is the url you want to update\n{url}\n"
+
+def update_url(new):
     global all_paths
-    count = 0
-    for i in all_paths:
-        file = open(i, 'r')
-        if old in file.read():
-            count += 1
-            file.close()
-    if count == 2:
-        return True
-    else:
-        return False
-    
-def update_url(old, new):
+    global url
     global all_paths
     for i in all_paths:
         file = open(i, 'r')
         all_lines = file.read()
-        replace = all_lines.replace(old, new)
+        replace = all_lines.replace(url, new)
         file.close()
         
         write_file = open(i, 'w')
         write_file.write(replace)
         write_file.close()
 
+check_yes = input(check_with_user())
 
-print('Format input as such\n')
-print('old_url,new_url\n')
-print('----------------------\n')
-old_new_url = input('Input Old and New url name\n').split(',')
-old = old_new_url[0].strip()
-new = old_new_url[1].strip()
-print('Checking to see if old url is in js files and config files')
-valid_url = check_url(old)
+if check_yes == 'y':
 
-if valid_url:
-    update_url(old, new)
-    print('url name is updated check config files for verification')
-else:
-    print('The url was not found in all necessary locations. JS files & Config files in PortableTools and PortableTools/workers\n')
-    print('Update could not be made')
+    print('Format input as such\n')
+    print('new_url\n')
+    print('----------------------\n')
+    new_url = input('New url name\n').split(',')
+    new = new_url[0].strip()
+
+    update_url(new)
