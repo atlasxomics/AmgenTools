@@ -1,10 +1,10 @@
 import subprocess
 
 
-api_path = '/root/PortableAtlasTools/config.yml'
-worker_path = '/root/PortableAtlasTools/workers/config.yml'
-js_path = '/root/PortableAtlasTools/src/static/js/app.38acc792.js'
-js_map_path = '/root/PortableAtlasTools/src/static/js/app.38acc792.js.map'
+api_path = 'config.yml'
+worker_path = 'workers/config.yml'
+js_path = 'src/static/js/app.38acc792.js'
+js_map_path = 'src/static/js/app.38acc792.js.map'
 all_paths = [api_path, worker_path, js_map_path, js_path]
 def check_bucket(old):
     global all_paths
