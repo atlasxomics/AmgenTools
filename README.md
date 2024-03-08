@@ -18,12 +18,12 @@ These need to be installed on the ec2 instance
 ### Config File details
 
 config.yml file is required to be ready with AWS credentials as well as bucket-name. config_template.yml can be copied and furnished with required parameters.
-The config file must be placed inside the folder AmgenTool and in AmgenTools/workers
+The config file must be placed inside the folder PortablAtlaseTool and in PortableAtlasTools/workers
 
 ### s3 bucket structure
 Below will be the necessary naming scheme for the folders within the s3
 
-- <company_name>-atx-cloud-dev
+- <company_name>-atx-cloud
   - This will contain data to be analyzed in AtlasXplore
 - <company_name>-atx-illumina
   - This will contain data to be processed in AtlasXBrowser
@@ -42,4 +42,12 @@ docker-compose down
 docker system prune -a 
 ```
 After the last command. Enter y when prompted and then click Enter/Return
+
+### How to manually change bucket name
+
+In PortableAtlasTools there will be a python script to update the necessary files. Make sure both configs are updated to match the tempalte.
+The command to run it is below format of input will be **old_bucket,new_bucket**
+```
+python update_bucket.py
+```
 
