@@ -46,7 +46,7 @@ After the last command. Enter y when prompted and then click Enter/Return
 ### How to manually change bucket name
 
 In PortableAtlasTools there will be a python script to update the necessary files. Make sure both configs are updated to match the tempalte.
-The command to run it is below format of input will be **old_bucket,new_bucket**
+The command to run it is below and format of input will be **old_bucket,new_bucket**
 ```
 python update_bucket.py
 ```
