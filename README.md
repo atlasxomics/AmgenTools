@@ -23,13 +23,11 @@ The config file must be placed inside the folder AmgenTool and in AmgenTools/wor
 ### s3 bucket structure
 Below will be the necessary naming scheme for the folders within the s3
 
-- atx-track-host
-  - In this folder upload the folder in the git repo named [ref]()
+- <company_name>-atx-cloud-dev
+  - This will contain data to be analyzed in AtlasXplore
+- <company_name>-atx-illumina
+  - This will contain data to be processed in AtlasXBrowser
  
-### Commands to create pipeline
-```
-sh <script_name.sh>
-```
 ### Commands to start docker containers
 ```
 docker network create atx-cloud
