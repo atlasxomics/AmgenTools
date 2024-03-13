@@ -1,7 +1,7 @@
 import re
 
-js_path = 'src/static/js/app.38acc792.js'
-js_map_path = 'src/static/js/app.38acc792.js.map'
+js_path = 'src/static/js/app.38b639eb.js'
+js_map_path = 'src/static/js/app.38b639eb.js.map'
 url = ''
 all_paths = [js_map_path, js_path]
 

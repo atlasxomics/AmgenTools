@@ -3,8 +3,8 @@ import subprocess
 
 api_path = 'config.yml'
 worker_path = 'workers/config.yml'
-js_path = 'src/static/js/app.38acc792.js'
-js_map_path = 'src/static/js/app.38acc792.js.map'
+js_path = 'src/static/js/app.38b639eb.js'
+js_map_path = 'src/static/js/app.38b639eb.js.map'
 all_paths = [api_path, worker_path, js_map_path, js_path]
 def check_bucket(old):
     global all_paths
