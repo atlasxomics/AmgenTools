@@ -20,12 +20,12 @@ services:
     #restart: always
     volumes:
       - $PWD/../:/root
-      - /root/pipe:/hostpipe
+      # - /root/pipe:/hostpipe
     environment:
       - TZ=America/New_York
     command: uwsgi --http 0.0.0.0:5000 --module main:app
   rmq:
-    image: rabbitmq:3-management
+    image: rabbitmq:3.12-management
     container_name: rabbitmq
     hostname: rabbitmq
     networks:
@@ -73,7 +73,8 @@ services:
   gene-worker:
     container_name: gene-worker
     working_dir: /root/workers
-    # network_mode : host
+    networks:
+      - atx-cloud
     image: atx-cloud
     build: . 
     user: 0:0

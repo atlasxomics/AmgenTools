@@ -14,7 +14,7 @@ import scipy
 
 import utils
 
-app=Celery('core_task',broker='amqp://'+os.environ['RABBITMQ_HOST'],backend='redis://'+os.environ['REDIS_HOST'])
+app=Celery('gene_task',broker='amqp://'+os.environ['RABBITMQ_HOST'],backend='redis://'+os.environ['REDIS_HOST'])
 
 @worker_process_init.connect()
 def on_worker_init(**_):
