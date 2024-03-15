@@ -50,4 +50,18 @@ The command to run it is below and format of input will be **old_bucket,new_buck
 ```
 python update_bucket.py
 ```
+### How to manually change url
 
+In PortableAtlasTools there will be a python script to update the url.
+The command to run it is below and format of input will be **new_url**
+```
+python update_url.py
+```
+### Start up software
+
+In PortableAtlasTools there will be a python script to update the url.
+The command to run it is below and format of input will be **new_url**
+```
+chmod +x portable.sh
+bash portable.sh
+```
