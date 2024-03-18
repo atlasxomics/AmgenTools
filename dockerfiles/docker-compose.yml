@@ -81,7 +81,7 @@ services:
     ipc: host
     restart: always
     volumes:
-      - $PWD/../:/root
+      - $PWD/..:/root
     environment:
       - TZ=America/New_York
       - RABBITMQ_HOST=root:defpass@rmq:5672
