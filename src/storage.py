@@ -401,7 +401,7 @@ class StorageAPI:
             return utils.error_message("The file doesn't exists",status_code=404)
         else:
             try:
-                command = f"echo 'aws s3 presign s3://{bucket_name}/{filename}' > /hostpipe/the_pipe"
+                command = f"echo 'aws s3 presign s3://{bucket_name}/{filename}' > pipe/the_pipe"
                 subprocess.run(command, shell=True)
                 text = open('/hostpipe/output.txt')
                 url = text.readline()
